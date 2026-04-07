@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊走 AI - 完整預覽</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #2196F3 0%, #9C27B0 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 40px 0;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .preview-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .section h2 {
+            color: #2196F3;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        /* Mobile App Preview */
+        .mobile-preview {
+            background: #1a1a1a;
+            border-radius: 30px;
+            padding: 20px;
+            width: 320px;
+            height: 640px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .mobile-screen {
+            background: white;
+            height: 100%;
+            border-radius: 25px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .mobile-header {
+            background: linear-gradient(135deg, #2196F3, #9C27B0);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mobile-logo {
+            width: 90px;
+            height: 90px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .mobile-title {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .mobile-subtitle {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .login-form {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2196F3;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 12px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2196F3, #9C27B0);
+            color: white;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #2196F3;
+            border: 2px solid #2196F3;
+        }
+
+        .btn-secondary:hover {
+            background: #2196F3;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            color: #999;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Web Admin Preview */
+        .web-preview {
+            background: #f5f5f5;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, #2196F3, #9C27B0);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-avatar {
+            width: 35px;
+            height: 35px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-content {
+            padding: 25px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .stat-card:nth-child(1) .stat-icon { color: #2196F3; }
+        .stat-card:nth-child(2) .stat-icon { color: #9C27B0; }
+        .stat-card:nth-child(3) .stat-icon { color: #4CAF50; }
+        .stat-card:nth-child(4) .stat-icon { color: #FF9800; }
+
+        .recent-activity {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .activity-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-user {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2px;
+        }
+
+        .activity-details {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-completed {
+            background: #e8f5e8;
+            color: #4CAF50;
+        }
+
+        .status-processing {
+            background: #fff3cd;
+            color: #FF9800;
+        }
+
+        /* Features Section */
+        .features-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+        }
+
+        .features-title {
+            text-align: center;
+            color: #2196F3;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-card {
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #2196F3;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .preview-sections {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .mobile-preview {
+                width: 280px;
+                height: 560px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .section:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        /* Interactive Elements */
+        .interactive-demo {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(33, 150, 243, 0.05);
+            border-radius: 10px;
+            border: 2px dashed #2196F3;
+        }
+
+        .demo-button {
+            background: linear-gradient(135deg, #2196F3, #9C27B0);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+        }
+
+        .demo-result {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+            display: none;
+        }
+
+        .demo-result.show {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✈️ 遊走 AI</h1>
+            <p>您的智能旅遊助手，找到最優惠的航班和酒店</p>
+        </div>
+
+        <div class="preview-sections">
+            <!-- Mobile App Preview -->
+            <div class="section">
+                <h2>📱 手機應用程式</h2>
+                <div class="mobile-preview">
+                    <div class="mobile-screen">
+                        <div class="mobile-header">
+                            <div class="mobile-logo">✈️</div>
+                            <div class="mobile-title">遊走 AI</div>
+                            <div class="mobile-subtitle">您的智能旅遊助手</div>
+                        </div>
+                        <div class="login-form">
+                            <div class="form-group">
+                                <label>電子郵件地址</label>
+                                <input type="email" placeholder="example@email.com" value="demo@youzou-ai.com" />
+                            </div>
+                            <div class="form-group">
+                                <label>密碼</label>
+                                <input type="password" placeholder="••••••••" value="demo1234" />
+                            </div>
+                            <button class="btn btn-primary" onclick="handleLogin()">登入</button>
+                            <div class="divider">
+                                <span>或</span>
+                            </div>
+                            <button class="btn btn-secondary" onclick="handleGoogleLogin()">使用 Google 登入</button>
+                            
+                            <div class="interactive-demo">
+                                <p style="margin-bottom: 10px; color: #666; font-size: 0.9rem;">💡 點擊按鈕體驗功能：</p>
+                                <button class="demo-button" onclick="showDemoResult()">模擬登入成功</button>
+                                <div id="demoResult" class="demo-result">
+                                    <strong>✅ 登入成功！</strong><br>
+                                    歡迎使用遊走 AI，正在跳轉到主頁面...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Web Admin Preview -->
+            <div class="section">
+                <h2>💻 管理後台</h2>
+                <div class="web-preview">
+                    <div class="admin-header">
+                        <div class="admin-title">遊走 AI 管理系統</div>
+                        <div class="admin-user">
+                            <span>管理員</span>
+                            <div class="admin-avatar">👤</div>
+                        </div>
+                    </div>
+                    <div class="admin-content">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">👥</div>
+                                <div class="stat-value">1,234</div>
+                                <div class="stat-label">總用戶數</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">🔍</div>
+                                <div class="stat-value">5,678</div>
+                                <div class="stat-label">搜索次數</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">🔄</div>
+                                <div class="stat-value">234</div>
+                                <div class="stat-label">自動檢查</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">💰</div>
+                                <div class="stat-value">$45,678</div>
+                                <div class="stat-label">總收入</div>
+                            </div>
+                        </div>
+
+                        <div class="recent-activity">
+                            <div class="activity-title">最近活動</div>
+                            <div class="activity-item">
+                                <div class="activity-icon" style="background: #e8f5e8; color: #4CAF50;">✈️</div>
+                                <div class="activity-content">
+                                    <div class="activity-user">張先生</div>
+                                    <div class="activity-details">搜索 HKG → NRT 航班</div>
+                                </div>
+                                <div class="activity-time">2分鐘前</div>
+                                <div class="status-badge status-completed">已完成</div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon" style="background: #fff3cd; color: #FF9800;">🏨</div>
+                                <div class="activity-content">
+                                    <div class="activity-user">李女士</div>
+                                    <div class="activity-details">預訂東京酒店</div>
+                                </div>
+                                <div class="activity-time">5分鐘前</div>
+                                <div class="status-badge status-processing">處理中</div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon" style="background: #e3f2fd; color: #2196F3;">🔄</div>
+                                <div class="activity-content">
+                                    <div class="activity-user">王先生</div>
+                                    <div class="activity-details">設置自動價格檢查</div>
+                                </div>
+                                <div class="activity-time">10分鐘前</div>
+                                <div class="status-badge status-completed">已完成</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-section">
+            <h2 class="features-title">🌟 核心功能特色</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-title">智能搜索</div>
+                    <div class="feature-description">
+                        最佳價格模式和放鬆模式，根據您的需求智能推薦最合適的航班和酒店組合
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <div class="feature-title">自動檢查</div>
+                    <div class="feature-description">
+                        24小時自動監控價格變化，及時通知您最佳預訂時機，確保搶到最優惠價格
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <div class="feature-title">點數系統</div>
+                    <div class="feature-description">
+                        免費用戶每日獲得點數，PRO用戶享受更多優惠和折扣，靈活的點數消耗機制
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-title">多平台支持</div>
+                    <div class="feature-description">
+                        iOS和Android原生應用，隨時隨地搜索和預訂，完美適配各種屏幕尺寸
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <div class="feature-title">繁體中文</div>
+                    <div class="feature-description">
+                        完整的繁體中文界面，專為香港和台灣用戶設計，本地化用戶體驗
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <div class="feature-title">安全可靠</div>
+                    <div class="feature-description">
+                        JWT身份驗證，加密存儲，保護您的個人信息安全，符合國際安全標準
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technology Stack -->
+        <div class="features-section" style="background: rgba(255,255,255,0.1); color: white;">
+            <h2 class="features-title" style="color: white;">🛠️ 技術架構</h2>
+            <div class="features-grid">
+                <div class="feature-card" style="background: rgba(255,255,255,0.1); border-left-color: rgba(255,255,255,0.3);">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title" style="color: white;">後端技術</div>
+                    <div class="feature-description" style="color: rgba(255,255,255,0.8);">
+                        Node.js + Express.js + PostgreSQL + Redis，高性能後端架構
+                    </div>
+                </div>
+                <div class="feature-card" style="background: rgba(255,255,255,0.1); border-left-color: rgba(255,255,255,0.3);">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-title" style="color: white;">移動開發</div>
+                    <div class="feature-description" style="color: rgba(255,255,255,0.8);">
+                        React Native + Expo，跨平台iOS/Android應用開發
+                    </div>
+                </div>
+                <div class="feature-card" style="background: rgba(255,255,255,0.1); border-left-color: rgba(255,255,255,0.3);">
+                    <div class="feature-icon">🌐</div>
+                    <div class="feature-title" style="color: white;">Web管理</div>
+                    <div class="feature-description" style="color: rgba(255,255,255,0.8);">
+                        React + Material-UI，現代化響應式管理界面
+                    </div>
+                </div>
+                <div class="feature-card" style="background: rgba(255,255,255,0.1); border-left-color: rgba(255,255,255,0.3);">
+                    <div class="feature-icon">🔐</div>
+                    <div class="feature-title" style="color: white;">安全認證</div>
+                    <div class="feature-description" style="color: rgba(255,255,255,0.8);">
+                        JWT + OAuth + bcrypt，企業級安全認證系統
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Interactive functions
+        function handleLogin() {
+            const result = document.getElementById('demoResult');
+            result.innerHTML = '<strong>✅ 登入成功！</strong><br>歡迎使用遊走 AI，正在跳轉到主頁面...';
+            result.classList.add('show');
+            
+            setTimeout(() => {
+                result.innerHTML = '<strong>🎉 歡迎來到遊走 AI！</strong><br>您現在可以開始搜索最優惠的航班和酒店了。';
+            }, 2000);
+        }
+
+        function handleGoogleLogin() {
+            const result = document.getElementById('demoResult');
+            result.innerHTML = '<strong>🔗 正在連接 Google...</strong><br>請稍候，正在驗證您的 Google 帳戶...';
+            result.classList.add('show');
+            
+            setTimeout(() => {
+                result.innerHTML = '<strong>✅ Google 登入成功！</strong><br>歡迎使用 Google 帳戶登入遊走 AI。';
+            }, 1500);
+        }
+
+        function showDemoResult() {
+            const result = document.getElementById('demoResult');
+            result.innerHTML = '<strong>✨ 功能演示</strong><br>這展示了遊走 AI 的登入流程和用戶體驗。';
+            result.classList.add('show');
+        }
+
+        // Add smooth scrolling
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate elements on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.section, .feature-card').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+
+            // Add click effects to buttons
+            document.querySelectorAll('.btn, .demo-button').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

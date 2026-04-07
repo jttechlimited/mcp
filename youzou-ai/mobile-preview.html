@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊走 AI - 手機應用程式預覽</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #2196F3 0%, #9C27B0 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .preview-container {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .mobile-frame {
+            background: #1a1a1a;
+            border-radius: 30px;
+            padding: 15px;
+            width: 375px;
+            height: 812px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+            position: relative;
+        }
+
+        .mobile-screen {
+            background: white;
+            height: 100%;
+            border-radius: 25px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .status-bar {
+            background: white;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-size: 14px;
+            color: #000;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #2196F3, #9C27B0);
+            padding: 40px 25px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .app-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .app-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .login-form {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #2196F3;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .form-input.error {
+            border-color: #f44336;
+            background: #fff5f5;
+        }
+
+        .error-message {
+            color: #f44336;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2196F3, #9C27B0);
+            color: white;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #2196F3;
+            border: 2px solid #2196F3;
+        }
+
+        .btn-secondary:hover {
+            background: #2196F3;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            color: #999;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .link-container {
+            flex-direction: row;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .link-text {
+            color: '#666';
+            font-size: 14px;
+        }
+
+        .link {
+            color: #2196F3;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .app-info {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .app-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .app-version {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .app-description {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 300px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .control-title {
+            color: #2196F3;
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .control-section {
+            margin-bottom: 25px;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .control-button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #2196F3;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: #1976D2;
+            transform: translateY(-1px);
+        }
+
+        .status-indicator {
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .status-success {
+            background: #e8f5e8;
+            color: #4CAF50;
+            border: 1px solid #4CAF50;
+        }
+
+        .status-error {
+            background: #ffebee;
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+
+        .status-info {
+            background: #e3f2fd;
+            color: #2196F3;
+            border: 1px solid #2196F3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .preview-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .mobile-frame {
+                width: 320px;
+                height: 694px;
+            }
+
+            .control-panel {
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        /* Button Click Effect */
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2196F3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <!-- Mobile App Preview -->
+        <div class="mobile-frame">
+            <div class="mobile-screen">
+                <!-- Status Bar -->
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <span>🔋 100%</span>
+                </div>
+                
+                <!-- App Header -->
+                <div class="app-header">
+                    <div class="app-logo">✈️</div>
+                    <div class="app-title">遊走 AI</div>
+                    <div class="app-subtitle">
+                        您的智能旅遊助手<br>
+                        <em>Travellin AI</em>
+                    </div>
+                </div>
+                
+                <!-- Login Form -->
+                <div class="login-form">
+                    <div class="form-group">
+                        <label class="form-label">電子郵件地址</label>
+                        <input 
+                            type="email" 
+                            class="form-input" 
+                            id="emailInput"
+                            placeholder="example@email.com"
+                            value="demo@youzou-ai.com"
+                        />
+                        <div class="error-message" id="emailError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">密碼</label>
+                        <input 
+                            type="password" 
+                            class="form-input" 
+                            id="passwordInput"
+                            placeholder="••••••••"
+                            value="demo1234"
+                        />
+                        <div class="error-message" id="passwordError"></div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="loginBtn" onclick="handleLogin()">
+                        登入
+                    </button>
+                    
+                    <div class="divider">
+                        <span>或</span>
+                    </div>
+                    
+                    <button class="btn btn-secondary" id="googleBtn" onclick="handleGoogleLogin()">
+                        使用 Google 登入
+                    </button>
+                    
+                    <div class="link-container">
+                        <span class="link-text">還沒有帳戶？</span>
+                        <a href="#" class="link" onclick="handleRegister()">立即註冊</a>
+                    </div>
+                </div>
+                
+                <!-- App Info -->
+                <div class="app-info">
+                    <div class="app-name">遊走 AI - Travellin AI</div>
+                    <div class="app-version">版本 1.0.0</div>
+                    <div class="app-description">
+                        智能旅遊助手，為您找到最優惠的航班和酒店
+                    </div>
+                </div>
+                
+                <!-- Loading Overlay -->
+                <div class="loading-overlay" id="loadingOverlay">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <h3 class="control-title">🎮 控制面板</h3>
+            
+            <div class="control-section">
+                <label class="control-label">測試電子郵件</label>
+                <input 
+                    type="email" 
+                    class="control-input" 
+                    id="testEmail"
+                    value="demo@youzou-ai.com"
+                    placeholder="輸入測試郵箱"
+                />
+            </div>
+            
+            <div class="control-section">
+                <label class="control-label">測試密碼</label>
+                <input 
+                    type="password" 
+                    class="control-input" 
+                    id="testPassword"
+                    value="demo1234"
+                    placeholder="輸入測試密碼"
+                />
+            </div>
+            
+            <div class="control-section">
+                <button class="control-button" onclick="fillTestData()">
+                    填入測試數據
+                </button>
+                <button class="control-button" onclick="clearForm()" style="background: #FF9800;">
+                    清除表單
+                </button>
+            </div>
+            
+            <div class="control-section">
+                <button class="control-button" onclick="simulateLogin()" style="background: #4CAF50;">
+                    模擬登入成功
+                </button>
+                <button class="control-button" onclick="simulateError()" style="background: #f44336;">
+                    模擬登入失敗
+                </button>
+            </div>
+            
+            <div id="statusIndicator" class="status-indicator" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let isLoading = false;
+
+        // Form validation
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validateForm() {
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            let isValid = true;
+
+            // Reset errors
+            document.getElementById('emailError').classList.remove('show');
+            document.getElementById('passwordError').classList.remove('show');
+            document.getElementById('emailInput').classList.remove('error');
+            document.getElementById('passwordInput').classList.remove('error');
+
+            // Validate email
+            if (!email.trim()) {
+                showError('emailError', '請輸入電子郵件地址');
+                document.getElementById('emailInput').classList.add('error');
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                showError('emailError', '請輸入有效的電子郵件地址');
+                document.getElementById('emailInput').classList.add('error');
+                isValid = false;
+            }
+
+            // Validate password
+            if (!password.trim()) {
+                showError('passwordError', '請輸入密碼');
+                document.getElementById('passwordInput').classList.add('error');
+                isValid = false;
+            } else if (password.length < 6) {
+                showError('passwordError', '密碼至少需要6個字符');
+                document.getElementById('passwordInput').classList.add('error');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+        }
+
+        function hideError(elementId) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.classList.remove('show');
+        }
+
+        function setLoading(loading) {
+            isLoading = loading;
+            const loginBtn = document.getElementById('loginBtn');
+            const googleBtn = document.getElementById('googleBtn');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+
+            if (loading) {
+                loginBtn.classList.add('btn-loading');
+                googleBtn.disabled = true;
+                loadingOverlay.classList.add('show');
+            } else {
+                loginBtn.classList.remove('btn-loading');
+                googleBtn.disabled = false;
+                loadingOverlay.classList.remove('show');
+            }
+        }
+
+        function showStatus(message, type = 'info') {
+            const statusIndicator = document.getElementById('statusIndicator');
+            statusIndicator.textContent = message;
+            statusIndicator.className = `status-indicator status-${type} fade-in`;
+            statusIndicator.style.display = 'block';
+
+            setTimeout(() => {
+                statusIndicator.style.display = 'none';
+            }, 3000);
+        }
+
+        // Login functions
+        async function handleLogin() {
+            if (isLoading) return;
+            
+            if (!validateForm()) {
+                showStatus('請修正表單錯誤', 'error');
+                return;
+            }
+
+            setLoading(true);
+            showStatus('正在登入...', 'info');
+
+            // Simulate API call
+            setTimeout(() => {
+                const email = document.getElementById('emailInput').value;
+                
+                // Simulate successful login
+                setLoading(false);
+                showStatus('✅ 登入成功！歡迎使用遊走 AI', 'success');
+                
+                // Simulate navigation to main app
+                setTimeout(() => {
+                    showStatus('🎉 正在跳轉到主頁面...', 'info');
+                    // In real app, this would navigate to main screen
+                }, 1000);
+                
+            }, 1500);
+        }
+
+        async function handleGoogleLogin() {
+            if (isLoading) return;
+            
+            setLoading(true);
+            showStatus('🔗 正在連接 Google...', 'info');
+
+            // Simulate Google OAuth
+            setTimeout(() => {
+                setLoading(false);
+                showStatus('✅ Google 登入成功！', 'success');
+                
+                setTimeout(() => {
+                    showStatus('🎉 正在跳轉到主頁面...', 'info');
+                }, 1000);
+                
+            }, 2000);
+        }
+
+        function handleRegister() {
+            showStatus('📝 正在跳轉到註冊頁面...', 'info');
+            // In real app, this would navigate to register screen
+        }
+
+        function handleForgotPassword() {
+            showStatus('📧 正在跳轉到忘記密碼頁面...', 'info');
+            // In real app, this would navigate to forgot password screen
+        }
+
+        // Control panel functions
+        function fillTestData() {
+            const testEmail = document.getElementById('testEmail').value || 'demo@youzou-ai.com';
+            const testPassword = document.getElementById('testPassword').value || 'demo1234';
+            
+            document.getElementById('emailInput').value = testEmail;
+            document.getElementById('passwordInput').value = testPassword;
+            
+            // Clear any existing errors
+            hideError('emailError');
+            hideError('passwordError');
+            
+            showStatus('✅ 測試數據已填入', 'success');
+        }
+
+        function clearForm() {
+            document.getElementById('emailInput').value = '';
+            document.getElementById('passwordInput').value = '';
+            
+            // Clear errors
+            hideError('emailError');
+            hideError('passwordError');
+            
+            showStatus('🧹 表單已清除', 'info');
+        }
+
+        function simulateLogin() {
+            if (validateForm()) {
+                handleLogin();
+            } else {
+                showStatus('❌ 請先填入有效的測試數據', 'error');
+            }
+        }
+
+        function simulateError() {
+            const email = document.getElementById('emailInput').value;
+            
+            if (!email) {
+                showError('emailError', '電子郵件不能為空');
+                showStatus('❌ 電子郵件驗證失敗', 'error');
+            } else if (!validateEmail(email)) {
+                showError('emailError', '電子郵件格式不正確');
+                showStatus('❌ 電子郵件格式錯誤', 'error');
+            } else {
+                showError('passwordError', '密碼不正確');
+                showStatus('❌ 密碼驗證失敗', 'error');
+            }
+        }
+
+        // Input event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInput = document.getElementById('emailInput');
+            const passwordInput = document.getElementById('passwordInput');
+
+            emailInput.addEventListener('input', function() {
+                hideError('emailError');
+                this.classList.remove('error');
+            });
+
+            passwordInput.addEventListener('input', function() {
+                hideError('passwordError');
+                this.classList.remove('error');
+            });
+
+            // Enter key support
+            emailInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    passwordInput.focus();
+                }
+            });
+
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleLogin();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
